@@ -1,18 +1,18 @@
 from __future__ import division
 # noinspection PyUnresolvedReferences
-import keras
+from tensorflow import keras
 
 from keras.layers import Flatten,BatchNormalization
 
 from keras.layers.convolutional import Conv2D
-from keras.layers.merge import add
+from keras.layers import add
 from keras.models import Sequential
 
-from keras.layers import Input, merge, ZeroPadding2D, concatenate
+from keras.layers import Input, ZeroPadding2D, concatenate
 from keras.layers.core import Dense, Dropout, Activation
 from keras.layers.convolutional import Convolution2D
 from keras.layers.pooling import AveragePooling2D, GlobalAveragePooling2D, MaxPooling2D
-from keras.layers.normalization import BatchNormalization
+from keras.layers import BatchNormalization
 
 import six
 from keras.regularizers import l2

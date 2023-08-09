@@ -8,7 +8,7 @@ import numpy as np
 from numpy import inf
 import matplotlib.pyplot as plt
 import cv2
-from keras.preprocessing.image import img_to_array
+from tensorflow.keras.preprocessing.image import img_to_array
 from crhd_generator import PlotCRHD_grid
 
 from Build_model import Build_model
