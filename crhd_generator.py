@@ -112,7 +112,7 @@ def PlotList(grids, dist, save_path, dpi=300, format='png'):
         f = []
         for _id in failures:
             try:
-                PlotCRHD_grid(_id, grids.loc[_id].coord, dist, save_path, dpi=dpi, format=format)
+                PlotCRHD_grid(_id, grids.loc[_id]['coord'], dist, save_path, dpi=dpi, format=format)
             except:
                 print(f'Round{str(iter)}: {_id} image generation failed')
                 f.append(_id)
@@ -131,7 +131,11 @@ def PlotCity(dist, grid_path, save_path, dpi=300, format='png'):
     :return: None
     '''
     mkdir(save_path)
-    grids = gpd.read_file(grid_path).set_index('id').to_crs(epsg=4326)
+    grids = gpd.read_file(grid_path)
+    
+    grids = grids.set_index('id')
+    grids = grids.to_crs(epsg=4326)
+    
     grids['coord'] = [(centroid.y, centroid.x) for centroid in grids.geometry.centroid]
     PlotList(grids, dist, save_path, dpi, format)
     print('complete!')
