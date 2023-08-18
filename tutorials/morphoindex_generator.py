@@ -27,9 +27,6 @@ def get_index(grid_path, road_path, building_path, landuse_path):
     roads = gpd.read_file(road_path)
     roads = roads[roads.geometry.notnull()]
     intersection = gpd.sjoin(grids_for_match, roads, how="right")
-
-    # Rename the index column  
-    intersection = intersection.rename(columns = {'index_left': 'id'})
     
     for _id in grids_for_match.index:
         intersection[intersection['id'] == _id] = gpd.clip(intersection[intersection['id'] == _id],
@@ -57,9 +54,6 @@ def get_index(grid_path, road_path, building_path, landuse_path):
     buildings = buildings.to_crs(epsg=4326)
     intersection = gpd.sjoin(grids_for_match, buildings, how="right")
     
-    # Rename column
-    intersection = intersection.rename(columns = {'index_left': 'id'})
-    
     grids['BuD'] = intersection.groupby('id')['area'].sum()
     grids['ABFA'] = intersection.groupby('id')['area'].mean()
     print('Building completed!')
@@ -76,9 +70,6 @@ def get_index(grid_path, road_path, building_path, landuse_path):
     landuse = landuse[landuse.geometry.notnull()]
         
     intersection = gpd.sjoin(grids_for_match, landuse, how="right")
-    
-    # Rename column
-    intersection = intersection.rename(columns = {'index_left': 'id'})
     
     intersection['geometry'] = intersection.buffer(0)
     for _id in grids_for_match.index:
@@ -206,14 +197,22 @@ class prob_calculator():
         if not self.model:
             raise Exception('No model is loaded.')
         grids = gpd.read_file(grid_path)
-        grids.set_index('id', inplace=True)
-        grids[['Prob_O', 'Prob_N', 'Prob_G', 'Prob_R']] = None
+        
+        # Rename columns
+        col = list(grids.columns)
+        
+        for i in col:
+            if 'id' in i or 'ID' in i:
+                _id = i
+        
+        grids.set_index(_id, inplace=True)
+        grids[['Prob_O', 'Prob_N', 'Prob_G', 'Prob_R', 'cls']] = None
 
         imgNameList = grids.index.to_list()
         # load images
 
         for i, imgName in enumerate(imgNameList):
-            imgPath = imgName + '.png'
+            imgPath = str(imgName) + '.png'
             file = os.path.join(image_path, imgPath)
 
             if not os.path.exists(file):  # if image not generated yet, plot it now
