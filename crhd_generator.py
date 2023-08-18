@@ -134,6 +134,7 @@ def PlotCity(dist, grid_path, save_path, dpi=300, format='png'):
     grids = gpd.read_file(grid_path)
     
     grids = grids.set_index('id')
+    grids.crs = 'EPSG:4326'
     grids = grids.to_crs(epsg=4326)
     
     grids['coord'] = [(centroid.y, centroid.x) for centroid in grids.geometry.centroid]
