@@ -82,7 +82,7 @@ def PlotCRHD(center_point, dist, name=None, save_path=None, dpi=300, format='png
 
     plt.axis('off')
     if save_path:
-        filename = os.path.join(save_path, f'{str(dist)}_{name}.{format}')
+        filename = os.path.join(save_path, f'{name}.{format}')
         plt.savefig(filename, dpi=dpi, bbox_inches='tight',pad_inches=0, format=format)
         plt.close()
     else:
